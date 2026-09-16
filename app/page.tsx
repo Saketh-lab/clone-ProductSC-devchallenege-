@@ -1,67 +1,116 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { FormEvent, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ChevronDown, Globe } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { NetflixLogo } from "@/components/netflix-logo";
+
+export default function LandingPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+
+  function handleGetStarted(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const trimmed = email.trim();
+    router.push(
+      trimmed ? `/login?email=${encodeURIComponent(trimmed)}` : "/login"
+    );
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="relative min-h-dvh overflow-hidden bg-black text-white">
+      {/* Poster-wall atmosphere (placeholder for real collage asset) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-40"
+        style={{
+          backgroundImage: `
+            linear-gradient(105deg, rgba(0,0,0,0.55) 0%, transparent 45%),
+            radial-gradient(ellipse at 50% 40%, transparent 0%, rgba(0,0,0,0.75) 70%, #000 100%),
+            repeating-linear-gradient(
+              -12deg,
+              #1a1a1a 0px,
+              #1a1a1a 90px,
+              #111 90px,
+              #111 180px,
+              #222 180px,
+              #222 270px,
+              #0d0d0d 270px,
+              #0d0d0d 360px
+            )
+          `,
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black via-black/50 to-black"
+      />
+
+      {/* Top bar */}
+      <header className="absolute inset-x-0 top-0 z-20">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-5 sm:px-8 md:px-12">
+          <NetflixLogo />
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              className="inline-flex h-8 items-center gap-1.5 rounded border border-white/40 bg-black/60 px-2.5 text-sm text-white sm:h-9 sm:px-3"
+              aria-label="Select language"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              <Globe className="size-3.5 shrink-0 opacity-90" />
+              <span className="hidden sm:inline">English</span>
+              <ChevronDown className="size-3.5 opacity-80" />
+            </button>
+
+            <Button
+              asChild
+              className="h-8 rounded bg-[#E50914] px-3.5 text-sm font-medium text-white hover:bg-[#c11119] sm:h-9 sm:px-4"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <Link href="/login">Sign In</Link>
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </header>
+
+      {/* Hero */}
+      <main className="relative z-10 flex min-h-dvh flex-col items-center justify-center px-4 pb-16 pt-24 text-center sm:px-8">
+        <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-4 sm:gap-5">
+          <h1 className="text-balance text-3xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl">
+            Unlimited movies, TV shows, and more
+          </h1>
+
+          <p className="text-lg text-white sm:text-xl md:text-2xl">
+            Starts at $6.99. Cancel anytime.
+          </p>
+
+          <p className="max-w-xl text-base text-white sm:text-lg">
+            Ready to watch? Enter your email to create or restart your
+            membership.
+          </p>
+
+          <form
+            onSubmit={handleGetStarted}
+            className="mt-2 flex w-full max-w-xl flex-col gap-3 sm:mt-4 sm:flex-row sm:items-stretch sm:gap-2"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+            <Input
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email address"
+              autoComplete="email"
+              className="h-12 flex-1 rounded border border-white/50 bg-black/60 px-4 text-base text-white placeholder:text-white/60 focus-visible:border-white focus-visible:ring-white/30 sm:h-14 md:text-base"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <Button
+              type="submit"
+              className="h-12 shrink-0 rounded bg-[#E50914] px-5 text-lg font-medium text-white hover:bg-[#c11119] sm:h-14 sm:px-6 sm:text-xl"
+            >
+              Get Started <span aria-hidden>›</span>
+            </Button>
+          </form>
         </div>
       </main>
     </div>
