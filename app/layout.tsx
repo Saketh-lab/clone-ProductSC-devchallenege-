@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist_Mono, IBM_Plex_Sans, Libre_Franklin } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Providers } from "./providers";
+import { DashboardShell } from "@/components/dashboard/shell";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
+const ibmPlex = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-bebas",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sans",
 });
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const display = Libre_Franklin({
   subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-display",
 });
 
 const geistMono = Geist_Mono({
@@ -22,8 +23,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Netflix",
-  description: "Unlimited movies, TV shows, and more",
+  title: "PortPulse — Cross-Port Intelligence",
+  description:
+    "Module 3 sample dashboard: status across 11 ports, findings, data quality, and priorities. ILLUSTRATIVE synthetic data.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -31,16 +33,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={cn(
-        "h-full",
-        "antialiased",
-        geistSans.variable,
+        "h-full antialiased",
+        ibmPlex.variable,
+        display.variable,
         geistMono.variable,
-        bebasNeue.variable,
-        "font-sans",
-        inter.variable
+        "font-sans"
       )}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full">
+        <Providers>
+          <DashboardShell>{children}</DashboardShell>
+        </Providers>
+      </body>
     </html>
   );
 }
