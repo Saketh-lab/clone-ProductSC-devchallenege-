@@ -196,8 +196,17 @@ export function PortAssetView() {
                   </div>
                 </div>
                 <dl className="space-y-2 text-sm">
-                  <Row k="Finding" v={finding.id} />
+                  <Row k="Finding" v={finding.displayId} />
                   <Row k="Confidence" v={finding.confidence.toFixed(2)} />
+                  <Row k="Data quality" v={finding.dataQualityScore.toFixed(2)} />
+                  <Row
+                    k="Verify"
+                    v={
+                      finding.verifyFlag
+                        ? finding.verifyTrigger
+                        : "no (conf ≥ 0.6 and DQ ≥ 0.5)"
+                    }
+                  />
                   <Row
                     k="Position confidence"
                     v={finding.positionConfidence.toFixed(2)}

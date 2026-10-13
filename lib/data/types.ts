@@ -4,13 +4,12 @@ export type UserRole =
   | "management"
   | "platform_admin";
 
+/** Doc status ladder (Module 2/3). */
 export type ObservationStatus =
-  | "open"
-  | "confirmed"
-  | "rejected"
-  | "awaiting_review"
-  | "work_order_raised"
-  | "closed";
+  | "auto_detected"
+  | "needs_review"
+  | "inspector_confirmed"
+  | "rejected";
 
 export type Severity = 1 | 2 | 3 | 4 | 5;
 
@@ -53,11 +52,17 @@ export type Port = {
   /** Stored aggregate — not computed in UI */
   assetsTotal: number;
   assetsInspected: number;
+  /** Not yet inspected = total − inspected (stored to match that definition) */
   assetsPending: number;
+  /** Among inspected assets that need another pass (not part of pending) */
   assetsNeedsFollowUp: number;
   unresolvedFindings: number;
   openDataQualityWarnings: number;
   lastInspectionDate: string;
+  /**
+   * Share of due inspections completed by their due date (stored).
+   * Not the same as inspected/total.
+   */
   percentOnSchedule: number;
   trendDirection: "up" | "down" | "flat";
   worstOpenPriority: PriorityBand;
@@ -84,13 +89,18 @@ export type Mission = {
   assetId: string;
   date: string;
   dataQualityBand: DataQualityBand;
+  /** 0–1 stored mission data-quality score */
+  dataQualityScore: number;
   modelVersion: string;
   dataVersion: string;
   coveragePercent: number;
 };
 
 export type Finding = {
+  /** Internal stable key */
   id: string;
+  /** OBS-… until inspector_confirmed, then DEF-… */
+  displayId: string;
   portId: string;
   assetId: string;
   missionId: string;
@@ -98,6 +108,8 @@ export type Finding = {
   status: ObservationStatus;
   severity: Severity;
   confidence: number;
+  /** 0–1 stored data-quality score for verify rule */
+  dataQualityScore: number;
   firstSeen: string;
   lastSeen: string;
   panelId: string;
@@ -106,9 +118,20 @@ export type Finding = {
   standoffM: number;
   imageQuality: DataQualityBand;
   modelSuggestion: string;
+  /**
+   * Stored verify flag. Rule: confidence < 0.6 OR dataQualityScore < 0.5.
+   */
   verifyFlag: boolean;
+  /** Which rule fired — null when verifyFlag is false */
+  verifyTrigger: string | null;
   reviewer: string | null;
   daysInQueue: number;
+  /** 0–1 rate of change used in priority formula */
+  rateOfChange: number;
+  /**
+   * Stored priority score =
+   * 0.45×severityNorm + 0.30×rateOfChange + 0.25×criticalityNorm (×100)
+   */
   priorityScore: number;
   priorityBand: PriorityBand;
   priorityExplanation: string;
@@ -169,3 +192,10 @@ export type DashboardFilters = {
   verifyFlag: "all" | "yes" | "no";
   reviewer: string | "all";
 };
+
+/** Priority weights (doc): severity, rate of change, criticality */
+export const PRIORITY_WEIGHTS = {
+  severity: 0.45,
+  rateOfChange: 0.3,
+  criticality: 0.25,
+} as const;

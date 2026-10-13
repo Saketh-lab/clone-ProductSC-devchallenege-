@@ -28,12 +28,20 @@ export function NetworkOverview() {
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <StatTile label="Inspected" value={totals.inspected} hint="Stored sum" />
-        <StatTile label="Pending" value={totals.pending} hint="Stored sum" />
+        <StatTile
+          label="Inspected"
+          value={totals.inspected}
+          hint="Assets with ≥1 completed survey"
+        />
+        <StatTile
+          label="Pending"
+          value={totals.pending}
+          hint="Not yet inspected (= total − inspected)"
+        />
         <StatTile
           label="Needs follow-up"
           value={totals.needsFollowUp}
-          hint="Stored sum"
+          hint="Already inspected; need another pass"
         />
         <StatTile
           label="Unresolved findings"
@@ -43,9 +51,14 @@ export function NetworkOverview() {
         <StatTile
           label="Open DQ warnings"
           value={totals.openDataQualityWarnings}
-          hint="Stored sum"
+          hint="Open only — matches data-quality centre"
         />
       </div>
+      <p className="text-[11px] text-[var(--dash-muted)]">
+        Tile check: inspected ({totals.inspected}) + pending ({totals.pending}) ={" "}
+        {totals.inspected + totals.pending} assets in scope. Needs follow-up is
+        a subset of inspected, not an extra bucket.
+      </p>
 
       <div className="grid gap-4 lg:grid-cols-5">
         <Panel
@@ -137,7 +150,12 @@ export function NetworkOverview() {
                 <th className="py-2 pr-3 font-medium">Port</th>
                 <th className="py-2 pr-3 font-medium">Assets</th>
                 <th className="py-2 pr-3 font-medium">Last insp.</th>
-                <th className="py-2 pr-3 font-medium">On schedule</th>
+                <th className="py-2 pr-3 font-medium">
+                  On schedule
+                  <span className="mt-0.5 block font-normal normal-case tracking-normal text-[10px] text-[var(--dash-muted)]">
+                    % of due inspections done by due date
+                  </span>
+                </th>
                 <th className="py-2 pr-3 font-medium">Unresolved</th>
                 <th className="py-2 pr-3 font-medium">DQ warn.</th>
                 <th className="py-2 pr-3 font-medium">Worst priority</th>

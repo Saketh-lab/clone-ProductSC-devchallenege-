@@ -68,7 +68,7 @@ export function ReportsAudit() {
         </ul>
         <p className="mt-3 text-[11px] text-[var(--dash-muted)]">
           Example stamp: dataVersion mission-2026-03-28-r3 · model defect-v2.4.1 ·
-          weights criticality-A severity 1.4
+          weights severity 0.45 / rateOfChange 0.30 / criticality 0.25
         </p>
       </Panel>
 
@@ -77,8 +77,8 @@ export function ReportsAudit() {
         subtitle="Severity 5 · fast change on critical asset · items stuck in queue"
       >
         <ul className="list-disc space-y-1 pl-5 text-sm text-[var(--dash-muted)]">
-          <li>f-1001 severity 5 crack growth on Quay Wall B1 North</li>
-          <li>f-1003 awaiting review 21 days — escalate</li>
+          <li>OBS-1001 severity 5 crack growth on Quay Wall B1 North</li>
+          <li>OBS-1003 needs review 21 days — escalate</li>
           <li>Tees Mouth: 4 overdue inspections</li>
         </ul>
       </Panel>

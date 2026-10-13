@@ -1,6 +1,7 @@
 "use client";
 
 import { useDashboard } from "@/context/dashboard-context";
+import { STATUS_FILTER_HELP, STATUS_LABELS } from "@/lib/data/labels";
 import { PORTS } from "@/lib/data/store";
 import type { AssetClass, ObservationStatus, Severity } from "@/lib/data/types";
 
@@ -9,9 +10,9 @@ export function FilterBar() {
 
   return (
     <div className="border-b border-[var(--dash-border)] bg-[var(--dash-bg)] px-4 py-3 md:px-6">
-      <div className="mb-2 flex items-center justify-between gap-2">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--dash-muted)]">
-          Filters carry across screens
+          Filters carry across screens · {STATUS_FILTER_HELP}
         </p>
         <button
           type="button"
@@ -73,12 +74,9 @@ export function FilterBar() {
           }
           options={[
             { value: "all", label: "All statuses" },
-            { value: "open", label: "Open" },
-            { value: "awaiting_review", label: "Awaiting review" },
-            { value: "confirmed", label: "Confirmed" },
-            { value: "rejected", label: "Rejected" },
-            { value: "work_order_raised", label: "Work order" },
-            { value: "closed", label: "Closed" },
+            ...(
+              Object.entries(STATUS_LABELS) as [ObservationStatus, string][]
+            ).map(([value, label]) => ({ value, label })),
           ]}
         />
         <Select

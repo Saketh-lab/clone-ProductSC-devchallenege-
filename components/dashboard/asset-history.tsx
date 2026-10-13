@@ -11,6 +11,7 @@ import {
   missionsForAsset,
   portsVisibleToRole,
 } from "@/lib/data/selectors";
+import { statusLabel } from "@/lib/data/labels";
 import { Badge, Panel } from "./ui";
 
 export function AssetHistory() {
@@ -134,7 +135,7 @@ export function AssetHistory() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Panel
           title="Side-by-side slider"
-          subtitle="Registration error shown beside images (illustrative ±0.12 m)"
+          subtitle="Registration error shown beside images (report example: 4 cm)"
         >
           <div className="relative aspect-video overflow-hidden rounded-md border border-[var(--dash-border)]">
             <div className="absolute inset-0 flex items-center justify-center bg-sky-950/60 text-xs">
@@ -160,7 +161,8 @@ export function AssetHistory() {
             className="mt-3 w-full"
           />
           <p className="mt-2 text-[11px] text-[var(--dash-muted)]">
-            Registration error: ±0.12 m · change trusted only beyond this error.
+            Registration error: 4 cm (±0.04 m) · change trusted only beyond this
+            error.
           </p>
         </Panel>
 
@@ -213,12 +215,12 @@ export function AssetHistory() {
                   key={d.id}
                   className="border-b border-[var(--dash-border)]/70"
                 >
-                  <td className="py-2 pr-3 font-mono text-xs">{d.id}</td>
+                  <td className="py-2 pr-3 font-mono text-xs">{d.displayId}</td>
                   <td className="py-2 pr-3">{d.defectType.replace("_", " ")}</td>
                   <td className="py-2 pr-3 tabular-nums">{d.firstSeen}</td>
                   <td className="py-2 pr-3 tabular-nums">{d.lastSeen}</td>
                   <td className="py-2">
-                    <Badge>{d.status.replaceAll("_", " ")}</Badge>
+                    <Badge>{statusLabel(d.status)}</Badge>
                   </td>
                 </tr>
               ))}

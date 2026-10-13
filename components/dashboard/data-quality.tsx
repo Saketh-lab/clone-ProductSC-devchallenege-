@@ -18,11 +18,16 @@ export function DataQualityCentre() {
         <p className="mt-1 text-sm text-[var(--dash-muted)]">
           One list of everything the platform doubts about its own data. Judge
           missions by validity, availability and fault recovery — not just
-          average error.
+          average error. Network overview tile counts <strong>open</strong>{" "}
+          warnings only (stored per port); this table lists all open and
+          acknowledged records for the filter.
         </p>
       </div>
 
-      <Panel title="Open & acknowledged warnings" subtitle="Stored warning records">
+      <Panel
+        title="Open & acknowledged warnings"
+        subtitle={`Showing all ${warnings.length} matching records (not a truncated “latest” list)`}
+      >
         <div className="overflow-x-auto">
           <table className="w-full min-w-[800px] text-left text-sm">
             <thead className="text-[10px] uppercase tracking-wider text-[var(--dash-muted)]">

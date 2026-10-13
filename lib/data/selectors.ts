@@ -150,15 +150,24 @@ export function warningsFiltered(filters: DashboardFilters) {
   });
 }
 
+/** Active priorities for action — excludes already inspector_confirmed / rejected. */
 export function priorityQueue(filters: DashboardFilters) {
   return filterFindings(FINDINGS, filters)
     .filter(
-      (f) =>
-        f.status === "awaiting_review" ||
-        f.status === "open" ||
-        f.status === "confirmed"
+      (f) => f.status === "needs_review" || f.status === "auto_detected"
     )
     .sort((a, b) => b.priorityScore - a.priorityScore);
+}
+
+/** Review queue — needs_review only (confirmed items stay out). */
+export function reviewQueue(filters: DashboardFilters) {
+  return filterFindings(FINDINGS, filters)
+    .filter((f) => f.status === "needs_review")
+    .sort((a, b) => b.priorityScore - a.priorityScore);
+}
+
+export function openWarningCount() {
+  return DATA_QUALITY_WARNINGS.filter((w) => w.status === "open").length;
 }
 
 export function priorityColor(band: PriorityBand) {
